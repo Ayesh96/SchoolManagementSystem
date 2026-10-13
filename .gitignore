@@ -46,3 +46,7 @@ Thumbs.db
 
 .cache/
 .local/
+
+# Graphify knowledge-graph output (local only, regenerable) + skill sync metadata
+.graphify/
+graphify-out/
