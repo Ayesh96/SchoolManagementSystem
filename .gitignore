@@ -47,6 +47,10 @@ Thumbs.db
 .cache/
 .local/
 
-# Graphify knowledge-graph output (local only, regenerable) + skill sync metadata
+# Graphify knowledge-graph output. The graph artifacts are committed so the graph can be
+# inspected from a PR; caches and machine-local state stay local (all regenerable).
 .graphify/
-graphify-out/
+graphify-out/*
+!graphify-out/graph.json
+!graphify-out/GRAPH_REPORT.md
+!graphify-out/graph.html
