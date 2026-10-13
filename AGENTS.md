@@ -125,6 +125,19 @@ Every few days, use a scheduled automation to read recent `memory/YYYY-MM-DD.md`
 
 Be helpful without being annoying: check in a few times a day, do useful background work, respect quiet time.
 
+## Repository Conventions — SchoolManagementSystem
+
+Adapted from the PSX_Scraper AGENTS.md conventions. Its PSX-only parts (render.yaml,
+Prisma, dev/prod compose overlays, the deploy workflow, the forced-command SSH key) do
+not apply to this repo.
+
+- Never commit or push directly to `main` or `develop`: branch off (`git switch -c feat/<name> origin/develop`), push, and open a PR with `gh pr create --base develop`; never merge my own PR. <!-- project: github.com/tahirhsn91/SchoolManagementSystem -->
+- Never commit `.env` or copy its values into commits, PRs, or logs; only `.env.example` belongs in git. <!-- project: github.com/tahirhsn91/SchoolManagementSystem -->
+- Take host ports from env (`.env`: `BACKEND_PORT`, `FRONTEND_PORT`, `POSTGRES_PORT`) rather than editing `docker-compose.yml`; in production keep Postgres bound to `127.0.0.1`, not `0.0.0.0`. <!-- project: github.com/tahirhsn91/SchoolManagementSystem -->
+- Migrations run from the backend container entrypoint (`drizzle-kit migrate`); never run them by hand against a live database, and never edit an already-applied migration - add a new one. <!-- project: github.com/tahirhsn91/SchoolManagementSystem -->
+- Before calling a change done, run `pnpm run typecheck` and `pnpm run build`. <!-- project: github.com/tahirhsn91/SchoolManagementSystem -->
+- For codebase questions, query the Graphify knowledge graph when `graphify-out/` exists, then read only the files those queries name. <!-- project: github.com/tahirhsn91/SchoolManagementSystem -->
+
 ## Make It Yours
 
 This is a starting point. Add your own conventions, style, and rules as you figure out what works.
