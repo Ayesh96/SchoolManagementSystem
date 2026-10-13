@@ -3,14 +3,548 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: API for Cedar Grove School Management
 servers:
   - url: /api
     description: Base API path
 tags:
+  - name: dashboard
+    description: School overview
+  - name: teachers
+    description: Teacher records
+  - name: students
+    description: Student records
+  - name: classrooms
+    description: Classes and rooms
+  - name: timetable
+    description: Weekly lesson timetable
+  - name: fees
+    description: Student fees and payments
   - name: health
     description: Health operations
 paths:
+  /dashboard:
+    get:
+      operationId: getDashboard
+      tags: [dashboard]
+      summary: Get school overview
+      responses:
+        "200":
+          description: School totals and upcoming lessons
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+        "500":
+          description: Request could not be completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /teachers:
+    get:
+      operationId: listTeachers
+      tags: [teachers]
+      summary: List teachers
+      responses:
+        "200":
+          description: Teacher records
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeacherList"
+        "500":
+          description: Request could not be completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: createTeacher
+      tags: [teachers]
+      summary: Enroll a teacher
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TeacherInput"
+      responses:
+        "201":
+          description: Teacher enrolled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Teacher"
+        "400":
+          description: Invalid teacher details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Request could not be completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /teachers/{id}:
+    patch:
+      operationId: updateTeacher
+      tags: [teachers]
+      summary: Update a teacher
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TeacherUpdate"
+      responses:
+        "200":
+          description: Updated teacher
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Teacher"
+        "400":
+          description: Invalid teacher details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Teacher not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Request could not be completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /students:
+    get:
+      operationId: listStudents
+      tags: [students]
+      summary: List students
+      responses:
+        "200":
+          description: Student records
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentList"
+        "500":
+          description: Request could not be completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: createStudent
+      tags: [students]
+      summary: Enroll a student
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentInput"
+      responses:
+        "201":
+          description: Student enrolled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+        "400":
+          description: Invalid student details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Request could not be completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /students/{id}:
+    patch:
+      operationId: updateStudent
+      tags: [students]
+      summary: Update a student
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentUpdate"
+      responses:
+        "200":
+          description: Updated student
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+        "400":
+          description: Invalid student details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Student not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Request could not be completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /classrooms:
+    get:
+      operationId: listClassrooms
+      tags: [classrooms]
+      summary: List classes and rooms
+      responses:
+        "200":
+          description: Classes and room assignments
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClassroomList"
+        "500":
+          description: Request could not be completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: createClassroom
+      tags: [classrooms]
+      summary: Create a class and room assignment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClassroomInput"
+      responses:
+        "201":
+          description: Classroom created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Classroom"
+        "400":
+          description: Invalid classroom details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Request could not be completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /classrooms/{id}:
+    patch:
+      operationId: updateClassroom
+      tags: [classrooms]
+      summary: Update a class or room assignment
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClassroomUpdate"
+      responses:
+        "200":
+          description: Updated classroom
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Classroom"
+        "400":
+          description: Invalid classroom details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Classroom not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Request could not be completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /timetable:
+    get:
+      operationId: listTimetableEntries
+      tags: [timetable]
+      summary: List weekly timetable entries
+      responses:
+        "200":
+          description: Timetable entries
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimetableEntryList"
+        "500":
+          description: Request could not be completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: createTimetableEntry
+      tags: [timetable]
+      summary: Add a timetable entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TimetableEntryInput"
+      responses:
+        "201":
+          description: Timetable entry created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimetableEntry"
+        "400":
+          description: Invalid or conflicting timetable entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Request could not be completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /timetable/{id}:
+    patch:
+      operationId: updateTimetableEntry
+      tags: [timetable]
+      summary: Update a timetable entry
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TimetableEntryUpdate"
+      responses:
+        "200":
+          description: Updated timetable entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimetableEntry"
+        "400":
+          description: Invalid or conflicting timetable entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Timetable entry not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Request could not be completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /fees:
+    get:
+      operationId: listFees
+      tags: [fees]
+      summary: List student fee records
+      responses:
+        "200":
+          description: Fee records with payment totals
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FeeRecordList"
+        "500":
+          description: Request could not be completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: createFee
+      tags: [fees]
+      summary: Add a fee record for a student
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FeeRecordInput"
+      responses:
+        "201":
+          description: Fee record created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FeeRecord"
+        "400":
+          description: Invalid fee details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Student not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Request could not be completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /fees/{id}:
+    patch:
+      operationId: updateFee
+      tags: [fees]
+      summary: Update a fee record
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FeeRecordUpdate"
+      responses:
+        "200":
+          description: Updated fee record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FeeRecord"
+        "400":
+          description: Invalid fee details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Fee record not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Request could not be completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /fees/{feeId}/payments:
+    get:
+      operationId: listFeePayments
+      tags: [fees]
+      summary: List payments for a fee record
+      parameters:
+        - name: feeId
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        "200":
+          description: Payment history
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FeePaymentList"
+        "404":
+          description: Fee record not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Request could not be completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: createFeePayment
+      tags: [fees]
+      summary: Record a fee payment
+      parameters:
+        - name: feeId
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FeePaymentInput"
+      responses:
+        "201":
+          description: Payment recorded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FeePayment"
+        "400":
+          description: Invalid payment or payment exceeds outstanding amount
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Fee record not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Request could not be completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /healthz:
     get:
       operationId: healthCheck
@@ -25,12 +559,469 @@ paths:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
 components:
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
   schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required: [error]
     HealthStatus:
       type: object
       properties:
         status:
           type: string
-      required:
-        - status
+      required: [status]
+    Teacher:
+      type: object
+      properties:
+        id:
+          type: integer
+        fullName:
+          type: string
+        subject:
+          type: string
+        email:
+          type: [string, "null"]
+        phone:
+          type: [string, "null"]
+        status:
+          $ref: "#/components/schemas/RecordStatus"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required: [id, fullName, subject, email, phone, status, createdAt, updatedAt]
+    TeacherInput:
+      type: object
+      properties:
+        fullName:
+          type: string
+          minLength: 1
+          maxLength: 160
+        subject:
+          type: string
+          minLength: 1
+          maxLength: 120
+        email:
+          type: [string, "null"]
+          format: email
+        phone:
+          type: [string, "null"]
+          maxLength: 40
+        status:
+          $ref: "#/components/schemas/RecordStatus"
+      required: [fullName, subject]
+    TeacherUpdate:
+      type: object
+      properties:
+        fullName:
+          type: string
+          minLength: 1
+          maxLength: 160
+        subject:
+          type: string
+          minLength: 1
+          maxLength: 120
+        email:
+          type: [string, "null"]
+          format: email
+        phone:
+          type: [string, "null"]
+          maxLength: 40
+        status:
+          $ref: "#/components/schemas/RecordStatus"
+    TeacherList:
+      type: array
+      items:
+        $ref: "#/components/schemas/Teacher"
+    Student:
+      type: object
+      properties:
+        id:
+          type: integer
+        fullName:
+          type: string
+        classroomId:
+          type: [integer, "null"]
+        classroomName:
+          type: [string, "null"]
+        guardianName:
+          type: string
+        guardianEmail:
+          type: [string, "null"]
+        guardianPhone:
+          type: [string, "null"]
+        enrollmentDate:
+          type: string
+          format: date
+        status:
+          $ref: "#/components/schemas/RecordStatus"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required: [id, fullName, classroomId, classroomName, guardianName, guardianEmail, guardianPhone, enrollmentDate, status, createdAt, updatedAt]
+    StudentInput:
+      type: object
+      properties:
+        fullName:
+          type: string
+          minLength: 1
+          maxLength: 160
+        classroomId:
+          type: [integer, "null"]
+        guardianName:
+          type: string
+          minLength: 1
+          maxLength: 160
+        guardianEmail:
+          type: [string, "null"]
+          format: email
+        guardianPhone:
+          type: [string, "null"]
+          maxLength: 40
+        enrollmentDate:
+          type: string
+          format: date
+        status:
+          $ref: "#/components/schemas/RecordStatus"
+      required: [fullName, guardianName, enrollmentDate]
+    StudentUpdate:
+      type: object
+      properties:
+        fullName:
+          type: string
+          minLength: 1
+          maxLength: 160
+        classroomId:
+          type: [integer, "null"]
+        guardianName:
+          type: string
+          minLength: 1
+          maxLength: 160
+        guardianEmail:
+          type: [string, "null"]
+          format: email
+        guardianPhone:
+          type: [string, "null"]
+          maxLength: 40
+        enrollmentDate:
+          type: string
+          format: date
+        status:
+          $ref: "#/components/schemas/RecordStatus"
+    StudentList:
+      type: array
+      items:
+        $ref: "#/components/schemas/Student"
+    Classroom:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        grade:
+          type: string
+        roomName:
+          type: string
+        capacity:
+          type: integer
+        teacherId:
+          type: [integer, "null"]
+        teacherName:
+          type: [string, "null"]
+        studentCount:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required: [id, name, grade, roomName, capacity, teacherId, teacherName, studentCount, createdAt, updatedAt]
+    ClassroomInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+        grade:
+          type: string
+          minLength: 1
+          maxLength: 60
+        roomName:
+          type: string
+          minLength: 1
+          maxLength: 80
+        capacity:
+          type: integer
+          minimum: 1
+          maximum: 500
+        teacherId:
+          type: [integer, "null"]
+      required: [name, grade, roomName, capacity]
+    ClassroomUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+        grade:
+          type: string
+          minLength: 1
+          maxLength: 60
+        roomName:
+          type: string
+          minLength: 1
+          maxLength: 80
+        capacity:
+          type: integer
+          minimum: 1
+          maximum: 500
+        teacherId:
+          type: [integer, "null"]
+    ClassroomList:
+      type: array
+      items:
+        $ref: "#/components/schemas/Classroom"
+    TimetableEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+        dayOfWeek:
+          type: integer
+          minimum: 1
+          maximum: 5
+        startTime:
+          type: string
+        endTime:
+          type: string
+        subject:
+          type: string
+        classroomId:
+          type: integer
+        classroomName:
+          type: string
+        roomName:
+          type: string
+        teacherId:
+          type: [integer, "null"]
+        teacherName:
+          type: [string, "null"]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required: [id, dayOfWeek, startTime, endTime, subject, classroomId, classroomName, roomName, teacherId, teacherName, createdAt, updatedAt]
+    TimetableEntryInput:
+      type: object
+      properties:
+        dayOfWeek:
+          type: integer
+          minimum: 1
+          maximum: 5
+        startTime:
+          type: string
+          pattern: "^(?:[01][0-9]|2[0-3]):[0-5][0-9]$"
+        endTime:
+          type: string
+          pattern: "^(?:[01][0-9]|2[0-3]):[0-5][0-9]$"
+        subject:
+          type: string
+          minLength: 1
+          maxLength: 120
+        classroomId:
+          type: integer
+          minimum: 1
+        teacherId:
+          type: [integer, "null"]
+      required: [dayOfWeek, startTime, endTime, subject, classroomId]
+    TimetableEntryUpdate:
+      type: object
+      properties:
+        dayOfWeek:
+          type: integer
+          minimum: 1
+          maximum: 5
+        startTime:
+          type: string
+          pattern: "^(?:[01][0-9]|2[0-3]):[0-5][0-9]$"
+        endTime:
+          type: string
+          pattern: "^(?:[01][0-9]|2[0-3]):[0-5][0-9]$"
+        subject:
+          type: string
+          minLength: 1
+          maxLength: 120
+        classroomId:
+          type: integer
+          minimum: 1
+        teacherId:
+          type: [integer, "null"]
+    TimetableEntryList:
+      type: array
+      items:
+        $ref: "#/components/schemas/TimetableEntry"
+    FeeRecord:
+      type: object
+      properties:
+        id:
+          type: integer
+        studentId:
+          type: integer
+        studentName:
+          type: string
+        classroomName:
+          type: [string, "null"]
+        term:
+          type: string
+        amountDue:
+          type: number
+          minimum: 0
+        amountPaid:
+          type: number
+          minimum: 0
+        remainingBalance:
+          type: number
+          minimum: 0
+        dueDate:
+          type: string
+          format: date
+        paymentStatus:
+          $ref: "#/components/schemas/PaymentStatus"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required: [id, studentId, studentName, classroomName, term, amountDue, amountPaid, remainingBalance, dueDate, paymentStatus, createdAt, updatedAt]
+    FeeRecordInput:
+      type: object
+      properties:
+        studentId:
+          type: integer
+          minimum: 1
+        term:
+          type: string
+          minLength: 1
+          maxLength: 100
+        amountDue:
+          type: number
+          minimum: 0.01
+        dueDate:
+          type: string
+          format: date
+      required: [studentId, term, amountDue, dueDate]
+    FeeRecordUpdate:
+      type: object
+      properties:
+        term:
+          type: string
+          minLength: 1
+          maxLength: 100
+        amountDue:
+          type: number
+          minimum: 0
+        dueDate:
+          type: string
+          format: date
+    FeeRecordList:
+      type: array
+      items:
+        $ref: "#/components/schemas/FeeRecord"
+    FeePayment:
+      type: object
+      properties:
+        id:
+          type: integer
+        feeId:
+          type: integer
+        amount:
+          type: number
+        paidAt:
+          type: string
+          format: date
+        method:
+          $ref: "#/components/schemas/PaymentMethod"
+        reference:
+          type: [string, "null"]
+        note:
+          type: [string, "null"]
+        createdAt:
+          type: string
+          format: date-time
+      required: [id, feeId, amount, paidAt, method, reference, note, createdAt]
+    FeePaymentInput:
+      type: object
+      properties:
+        amount:
+          type: number
+          minimum: 0.01
+        paidAt:
+          type: string
+          format: date
+        method:
+          $ref: "#/components/schemas/PaymentMethod"
+        reference:
+          type: [string, "null"]
+          maxLength: 120
+        note:
+          type: [string, "null"]
+          maxLength: 500
+      required: [amount, paidAt, method]
+    FeePaymentList:
+      type: array
+      items:
+        $ref: "#/components/schemas/FeePayment"
+    PaymentStatus:
+      type: string
+      enum: [unpaid, partial, paid]
+    PaymentMethod:
+      type: string
+      enum: [cash, bank_transfer, card, other]
+    RecordStatus:
+      type: string
+      enum: [active, inactive]
+    DashboardSummary:
+      type: object
+      properties:
+        teacherCount:
+          type: integer
+        studentCount:
+          type: integer
+        classroomCount:
+          type: integer
+        totalFeesDue:
+          type: number
+        totalFeesCollected:
+          type: number
+        totalFeesOutstanding:
+          type: number
+        outstandingFeeCount:
+          type: integer
+        upcomingLessons:
+          type: array
+          items:
+            $ref: "#/components/schemas/TimetableEntry"
+      required: [teacherCount, studentCount, classroomCount, totalFeesDue, totalFeesCollected, totalFeesOutstanding, outstandingFeeCount, upcomingLessons]
 

@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Cedar Grove School Management"
+description = "A school administration system for managing teachers, students, classes and rooms, weekly timetables, and student fees with records saved in PostgreSQL."
+version = "1.0.0"
+id = "artifacts/school-management"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23826
+
+[services.development]
+run = "pnpm --filter @workspace/school-management run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/school-management", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/school-management/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23826"
+BASE_PATH = "/"
