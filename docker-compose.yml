@@ -29,10 +29,13 @@ services:
     environment:
       NODE_ENV: production
       PORT: "8080"
+      SENTRY_DSN: http://codeakos@host.docker.internal:3100/1
       DATABASE_URL: postgresql://${POSTGRES_USER:-school}:${POSTGRES_PASSWORD:-school}@database:5432/${POSTGRES_DB:-school_management}
     depends_on:
       database:
         condition: service_healthy
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "${BACKEND_PORT:-8080}:8080"
 
