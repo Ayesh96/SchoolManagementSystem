@@ -56,7 +56,8 @@ async function timeSlotIssue(
 }
 
 router.get("/timetable", async (_req, res): Promise<void> => {
-  res.json(ListTimetableEntriesResponse.parse(await listTimetableData()));
+  const entries = await listTimetableData();
+  res.json(ListTimetableEntriesResponse.parse({ entries }));
 });
 
 router.post("/timetable", async (req, res): Promise<void> => {

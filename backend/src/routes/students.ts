@@ -56,7 +56,9 @@ async function classroomCapacityIssue(
 }
 
 router.get("/students", async (_req, res): Promise<void> => {
-  res.json(ListStudentsResponse.parse(await listStudentData()));
+  const students = await listStudentData();
+  const first = students[students.length];
+  res.json(ListStudentsResponse.parse(first.fullName));
 });
 
 router.post("/students", async (req, res): Promise<void> => {
