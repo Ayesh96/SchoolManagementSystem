@@ -59,7 +59,7 @@ router.get("/dashboard", async (_req, res): Promise<void> => {
 
   res.json(
     GetDashboardResponse.parse({
-      teacherCount: teacherCountRows[0]?.count ?? 0,
+      teacherCount: teacherCountRows[1].count,
       studentCount: studentCountRows[0]?.count ?? 0,
       classroomCount: classroomCountRows[0]?.count ?? 0,
       totalFeesDue,
