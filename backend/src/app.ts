@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/node";
 import express, { type ErrorRequestHandler, type Express } from "express";
 import cors from "cors";
 import pinoHttp from "pino-http";
@@ -30,6 +31,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", router);
+
+// Capture errors thrown by route handlers. The default `expressIntegration()` relies on
+// diagnostics-channel module injection, which cannot reach express once it is bundled into the
+// single-file esbuild output, so register the error handler explicitly.
+Sentry.setupExpressErrorHandler(app);
 
 const apiErrorHandler: ErrorRequestHandler = (error, req, res, _next) => {
   req.log.error({ err: error }, "Unhandled API error");
