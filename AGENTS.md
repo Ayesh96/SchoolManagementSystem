@@ -154,7 +154,7 @@ graphify god-nodes --top 10    # architectural hubs
 
 Read only the files those queries name. `graphify-out/GRAPH_REPORT.md` is the broad architecture orientation (god nodes, communities, surprising connections). If a query returns nothing useful or the graph is stale, say so and fall back to reading files - never silently skip the lookup.
 
-`graphify-out/` is gitignored and regenerable from source (tree-sitter AST only - no LLM, no API key, nothing leaves the machine):
+`graphify-out/` is regenerable from source (tree-sitter AST only - no LLM, no API key, nothing leaves the machine). The graph artifacts (`graph.json`, `GRAPH_REPORT.md`, `graph.html`) are committed so a graph can be reviewed in a PR; caches and machine-local state stay ignored:
 
 ```bash
 graphify extract . --code-only && graphify cluster-only . --no-label   # build / rebuild
