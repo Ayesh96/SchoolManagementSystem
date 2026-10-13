@@ -136,7 +136,30 @@ not apply to this repo.
 - Take host ports from env (`.env`: `BACKEND_PORT`, `FRONTEND_PORT`, `POSTGRES_PORT`) rather than editing `docker-compose.yml`; in production keep Postgres bound to `127.0.0.1`, not `0.0.0.0`. <!-- project: github.com/tahirhsn91/SchoolManagementSystem -->
 - Migrations run from the backend container entrypoint (`drizzle-kit migrate`); never run them by hand against a live database, and never edit an already-applied migration - add a new one. <!-- project: github.com/tahirhsn91/SchoolManagementSystem -->
 - Before calling a change done, run `pnpm run typecheck` and `pnpm run build`. <!-- project: github.com/tahirhsn91/SchoolManagementSystem -->
-- For codebase questions, query the Graphify knowledge graph when `graphify-out/` exists, then read only the files those queries name. <!-- project: github.com/tahirhsn91/SchoolManagementSystem -->
+- Always consult the Graphify knowledge graph **before** reading or changing code: whenever I need anything from the codebase, check the map first and work from its answer (see *Graphify - check the map first*). <!-- project: github.com/tahirhsn91/SchoolManagementSystem -->
+
+### Graphify - check the map first
+
+<!-- project: github.com/tahirhsn91/SchoolManagementSystem -->
+
+Whenever I need anything from the codebase - locate a symbol, trace a flow, decide where a change belongs, or answer a codebase question - I must query the Graphify knowledge graph **first** and let its answer scope what I read, instead of grepping or opening whole files.
+
+```bash
+graphify affected "<symbol>"   # what X impacts (reverse traversal)
+graphify explain "<symbol>"    # a node, its neighbours, and source locations
+graphify query "<question>"    # scoped subgraph for a plain-language question
+graphify path "<A>" "<B>"     # how two things connect
+graphify god-nodes --top 10    # architectural hubs
+```
+
+Read only the files those queries name. `graphify-out/GRAPH_REPORT.md` is the broad architecture orientation (god nodes, communities, surprising connections). If a query returns nothing useful or the graph is stale, say so and fall back to reading files - never silently skip the lookup.
+
+`graphify-out/` is gitignored and regenerable from source (tree-sitter AST only - no LLM, no API key, nothing leaves the machine):
+
+```bash
+graphify extract . --code-only && graphify cluster-only . --no-label   # build / rebuild
+graphify update .                                                      # refresh after edits
+```
 
 ## Make It Yours
 
