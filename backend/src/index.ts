@@ -1,3 +1,5 @@
+// Initialize Sentry before the app (and its integrations) are imported.
+import "./lib/sentry";
 import app from "./app";
 import { logger } from "./lib/logger";
 
