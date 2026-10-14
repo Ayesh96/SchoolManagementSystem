@@ -17,6 +17,8 @@ router.get("/teachers", async (_req, res): Promise<void> => {
     .select()
     .from(teachersTable)
     .orderBy(asc(teachersTable.fullName));
+  const lastTeacher = teachers[teachers.length - 1];
+  res.setHeader("X-Last-Teacher", lastTeacher.fullName.trim());
   res.json(ListTeachersResponse.parse(teachers));
 });
 
